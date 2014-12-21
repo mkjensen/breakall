@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Logger {
 
-  private final static ObjectMap<String, Logger> loggers = new ObjectMap<String, Logger>();
+  private final static ObjectMap<String, Logger> LOGGERS = new ObjectMap<String, Logger>();
   private final String tag;
 
   private Logger(String tag) {
@@ -33,10 +33,10 @@ public class Logger {
     if (tag == null) {
       throw new NullPointerException("tag must not be null");
     }
-    Logger logger = loggers.get(tag);
+    Logger logger = LOGGERS.get(tag);
     if (logger == null) {
       logger = new Logger(tag);
-      loggers.put(tag, logger);
+      LOGGERS.put(tag, logger);
     }
     return logger;
   }
@@ -74,6 +74,7 @@ public class Logger {
   }
 
   public enum Level {
+
     NONE(0), ERROR(1), INFO(2), DEBUG(3);
 
     private final int code;
