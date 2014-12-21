@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.github.mkjensen.breakall.World;
 
-// TODO Lots of methods in Actor does not make sense because of the Box2D Body
+// TODO Lots of methods in Actor do not make sense because of the Box2D Body
 public abstract class Box2DActor extends Actor implements Disposable {
 
   private World world;

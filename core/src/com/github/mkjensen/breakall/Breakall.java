@@ -13,7 +13,6 @@
  */
 package com.github.mkjensen.breakall;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.github.mkjensen.breakall.Logger.Level;
 import com.github.mkjensen.breakall.actor.Ball;
 import com.github.mkjensen.breakall.actor.Bricks;
 import com.github.mkjensen.breakall.actor.Paddle;
@@ -30,6 +30,7 @@ import com.github.mkjensen.breakall.actor.Walls;
 public class Breakall extends ApplicationAdapter {
 
   public static final boolean DEBUG = true;
+  private static final Logger LOG = Logger.getLogger(Breakall.class);
   private DebugRenderer debugRenderer;
   private World world;
   private Stage stage;
@@ -40,7 +41,7 @@ public class Breakall extends ApplicationAdapter {
   @Override
   public void create() {
     if (DEBUG) {
-      Gdx.app.setLogLevel(Application.LOG_DEBUG);
+      Logger.setLevel(Level.DEBUG);
     }
     world = new World();
     createRenderer();
@@ -116,7 +117,7 @@ public class Breakall extends ApplicationAdapter {
 
   @Override
   public void dispose() {
-    Gdx.app.debug("Main", "Disposing");
+    LOG.d("Disposing");
     paddle.dispose();
     bricks.dispose();
     walls.dispose();
