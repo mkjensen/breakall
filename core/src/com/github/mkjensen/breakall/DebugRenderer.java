@@ -13,18 +13,22 @@
  */
 package com.github.mkjensen.breakall;
 
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 
 public class DebugRenderer implements Disposable {
 
-  private Box2DDebugRenderer box2DDebugRenderer;
+  private final Box2DDebugRenderer box2DDebugRenderer;
+  private final World world;
+  private final Camera camera;
   private boolean enabled;
 
-  public DebugRenderer(boolean enabled) {
-    box2DDebugRenderer = new Box2DDebugRenderer();
-    this.enabled = enabled;
+  public DebugRenderer(World world, Camera camera) {
+    this.box2DDebugRenderer = new Box2DDebugRenderer();
+    this.world = world;
+    this.camera = camera;
+    this.enabled = true;
   }
 
   @Override
@@ -32,13 +36,9 @@ public class DebugRenderer implements Disposable {
     box2DDebugRenderer.dispose();
   }
 
-  public Box2DDebugRenderer getBox2DDebugRenderer() {
-    return box2DDebugRenderer;
-  }
-
-  public void render(World world, Matrix4 projMatrix) {
+  public void draw() {
     if (enabled) {
-      box2DDebugRenderer.render(world.getBox2DWorld(), projMatrix);
+      box2DDebugRenderer.render(world.getBox2DWorld(), camera.combined);
     }
   }
 

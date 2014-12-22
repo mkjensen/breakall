@@ -31,9 +31,9 @@ import com.github.mkjensen.breakall.actor.Walls;
 public class Breakall extends ApplicationAdapter {
 
   private static final Logger LOG = Logger.getLogger(Breakall.class);
-  private DebugRenderer debugRenderer;
   private World world;
   private Stage stage;
+  private DebugRenderer debugRenderer;
   private Walls walls;
   private Bricks bricks;
   private Paddle paddle;
@@ -41,7 +41,6 @@ public class Breakall extends ApplicationAdapter {
   @Override
   public void create() {
     Logger.setLevel(Level.DEBUG);
-    world = new World();
     createRenderer();
     createWalls();
     createBricks();
@@ -49,9 +48,10 @@ public class Breakall extends ApplicationAdapter {
   }
 
   private void createRenderer() {
-    debugRenderer = new DebugRenderer(true);
+    world = new World();
     FitViewport viewport = new FitViewport(world.getSize(), world.getSize());
     stage = new Stage(viewport);
+    debugRenderer = new DebugRenderer(world, stage.getCamera());
     Gdx.input.setInputProcessor(stage);
   }
 
@@ -120,8 +120,8 @@ public class Breakall extends ApplicationAdapter {
     stage.act(Gdx.graphics.getDeltaTime());
     stage.draw();
 
-    debugRenderer.render(world, stage.getCamera().combined);
-    world.step(1 / 45f, 6, 2); // https://github.com/libgdx/libgdx/wiki/box2d#stepping-the-simulation
+    debugRenderer.draw();
+    world.step();
   }
 
   @Override
@@ -135,8 +135,8 @@ public class Breakall extends ApplicationAdapter {
     paddle.dispose();
     bricks.dispose();
     walls.dispose();
+    debugRenderer.dispose();
     stage.dispose();
     world.dispose();
-    debugRenderer.dispose();
   }
 }

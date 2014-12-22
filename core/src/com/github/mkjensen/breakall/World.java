@@ -16,7 +16,6 @@ package com.github.mkjensen.breakall;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.utils.Disposable;
 
 public class World implements Disposable {
@@ -24,19 +23,23 @@ public class World implements Disposable {
   private static final float SIZE = 10f;
   private static final Vector2 GRAVITY = new Vector2(0f, 0f);
   private static final boolean SIMULATE_INACTIVE_BODIES = false;
-  private com.badlogic.gdx.physics.box2d.World box2DWorld;
+  private static final float TIME_STEP = 1 / 45f;
+  private static final int VELOCITY_ITERATIONS = 6;
+  private static final int POSITION_ITERATIONS = 2;
+  private final com.badlogic.gdx.physics.box2d.World box2DWorld;
 
   public World() {
     box2DWorld = new com.badlogic.gdx.physics.box2d.World(GRAVITY, !SIMULATE_INACTIVE_BODIES);
     box2DWorld.setContactListener(new Box2DContactListener());
   }
 
-  public float getSize() {
-    return SIZE;
+  @Override
+  public void dispose() {
+    box2DWorld.dispose();
   }
 
-  public com.badlogic.gdx.physics.box2d.World getBox2DWorld() {
-    return box2DWorld;
+  public float getSize() {
+    return SIZE;
   }
 
   public Body createBody(BodyDef def) {
@@ -47,16 +50,12 @@ public class World implements Disposable {
     box2DWorld.destroyBody(body);
   }
 
-  public void step(float timeStep, int velocityIterations, int positionIterations) {
-    box2DWorld.step(timeStep, velocityIterations, positionIterations);
+  public void step() {
+    // https://github.com/libgdx/libgdx/wiki/box2d#stepping-the-simulation
+    box2DWorld.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
   }
 
-  public void setContactListener(ContactListener listener) {
-    box2DWorld.setContactListener(listener);
-  }
-
-  @Override
-  public void dispose() {
-    box2DWorld.dispose();
+  com.badlogic.gdx.physics.box2d.World getBox2DWorld() {
+    return box2DWorld;
   }
 }
