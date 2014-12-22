@@ -45,6 +45,7 @@ public class Breakall extends ApplicationAdapter {
     createWalls();
     createBricks();
     createPaddle();
+    createInputListener();
   }
 
   private void createRenderer() {
@@ -68,7 +69,9 @@ public class Breakall extends ApplicationAdapter {
   private void createPaddle() {
     paddle = new Paddle(world);
     stage.addActor(paddle);
+  }
 
+  private void createInputListener() {
     stage.addListener(new InputListener() {
 
       @Override
