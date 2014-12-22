@@ -98,6 +98,11 @@ public class Breakall extends ApplicationAdapter {
       }
 
       @Override
+      public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        mouseMoved(event, x, y);
+      }
+
+      @Override
       public boolean mouseMoved(InputEvent event, float x, float y) {
         float margin = paddle.getWidth() / 2 + walls.getWallSize();
         x = MathUtils.clamp(x, margin, stage.getWidth() - margin);
