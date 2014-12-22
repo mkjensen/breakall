@@ -15,6 +15,7 @@ package com.github.mkjensen.breakall;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +30,6 @@ import com.github.mkjensen.breakall.actor.Walls;
 
 public class Breakall extends ApplicationAdapter {
 
-  public static final boolean DEBUG = true;
   private static final Logger LOG = Logger.getLogger(Breakall.class);
   private DebugRenderer debugRenderer;
   private World world;
@@ -40,9 +40,7 @@ public class Breakall extends ApplicationAdapter {
 
   @Override
   public void create() {
-    if (DEBUG) {
-      Logger.setLevel(Level.DEBUG);
-    }
+    Logger.setLevel(Level.DEBUG);
     world = new World();
     createRenderer();
     createWalls();
@@ -51,7 +49,7 @@ public class Breakall extends ApplicationAdapter {
   }
 
   private void createRenderer() {
-    debugRenderer = new DebugRenderer();
+    debugRenderer = new DebugRenderer(true);
     FitViewport viewport = new FitViewport(world.getSize(), world.getSize());
     stage = new Stage(viewport);
     Gdx.input.setInputProcessor(stage);
@@ -72,6 +70,20 @@ public class Breakall extends ApplicationAdapter {
     stage.addActor(paddle);
 
     stage.addListener(new InputListener() {
+
+      @Override
+      public boolean keyUp(InputEvent event, int keycode) {
+        switch (keycode) {
+          case Keys.F11:
+            debugRenderer.setEnabled(!debugRenderer.isEnabled());
+            return true;
+          case Keys.F12:
+            stage.getRoot().setVisible(!stage.getRoot().isVisible());
+            return true;
+          default:
+            return false;
+        }
+      }
 
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -103,10 +115,7 @@ public class Breakall extends ApplicationAdapter {
     stage.act(Gdx.graphics.getDeltaTime());
     stage.draw();
 
-    if (DEBUG) {
-      debugRenderer.render(world, stage.getCamera().combined);
-    }
-
+    debugRenderer.render(world, stage.getCamera().combined);
     world.step(1 / 45f, 6, 2); // https://github.com/libgdx/libgdx/wiki/box2d#stepping-the-simulation
   }
 

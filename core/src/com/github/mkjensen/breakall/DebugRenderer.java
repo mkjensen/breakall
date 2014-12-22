@@ -20,9 +20,16 @@ import com.badlogic.gdx.utils.Disposable;
 public class DebugRenderer implements Disposable {
 
   private Box2DDebugRenderer box2DDebugRenderer;
+  private boolean enabled;
 
-  public DebugRenderer() {
+  public DebugRenderer(boolean enabled) {
     box2DDebugRenderer = new Box2DDebugRenderer();
+    this.enabled = enabled;
+  }
+
+  @Override
+  public void dispose() {
+    box2DDebugRenderer.dispose();
   }
 
   public Box2DDebugRenderer getBox2DDebugRenderer() {
@@ -30,11 +37,16 @@ public class DebugRenderer implements Disposable {
   }
 
   public void render(World world, Matrix4 projMatrix) {
-    box2DDebugRenderer.render(world.getBox2DWorld(), projMatrix);
+    if (enabled) {
+      box2DDebugRenderer.render(world.getBox2DWorld(), projMatrix);
+    }
   }
 
-  @Override
-  public void dispose() {
-    box2DDebugRenderer.dispose();
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 }
